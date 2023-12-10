@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "pybullet-ur10-navigation"
+version = "0.1.0"
+description = ""
+authors = ["TristanBester <tristanbester@gmail.com>"]
+readme = "README.md"
+packages = [{include = "pybullet_ur10_navigation"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pybullet = "^3.2.6"
+numpy = "^1.26.2"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.11.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
