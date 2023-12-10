@@ -1,8 +1,8 @@
 # UR10 PyBullet Control
 
 <div style="display: flex; justify-content: space-between;">
-    <img src="https://github.com/TristanBester/pybullet-UR10-navigation/blob/main/assets/demo_angle_two.gif" alt="Your GIF" width="450" />
-    <img src="https://github.com/TristanBester/pybullet-UR10-navigation/blob/main/assets/demo_angle_one.gif" alt="Your GIF" width="450" />
+    <img src="https://github.com/TristanBester/pybullet-UR10-navigation/blob/main/assets/demo_angle_two.gif" alt="Your GIF" width="400" />
+    <img src="https://github.com/TristanBester/pybullet-UR10-navigation/blob/main/assets/demo_angle_one.gif" alt="Your GIF" width="400" />
 </div>
 
 ## Ovierview
