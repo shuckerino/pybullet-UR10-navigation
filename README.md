@@ -1,7 +1,9 @@
 # UR10 PyBullet Control
 
-<img src="https://github.com/TristanBester/pybullet-UR10-navigation/blob/main/assets/demo_angle_two.gif" alt="Your GIF" width="200" />
-<img src="https://github.com/TristanBester/pybullet-UR10-navigation/blob/main/assets/demo_angle_one.gif" alt="Your GIF" width="200" />
+<div style="display: flex; justify-content: space-between;">
+    <img src="https://github.com/TristanBester/pybullet-UR10-navigation/blob/main/assets/demo_angle_two.gif" alt="Your GIF" width="200" />
+    <img src="https://github.com/TristanBester/pybullet-UR10-navigation/blob/main/assets/demo_angle_one.gif" alt="Your GIF" width="200" />
+</div>
 
 ## Ovierview
 This project demonstrates how to control a Universal Robots UR10 robot in the PyBullet physics simulator using Python. PyBullet is a physics engine that allows for simulation and control of robotic systems. The UR10 is a popular industrial robot with six degrees of freedom.
