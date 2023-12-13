@@ -23,8 +23,8 @@ sudo apt-get update && sudo apt-get install -y ffmpeg
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/ur10-pybullet-control.git
-cd ur10-pybullet-control
+git clone https://github.com/TristanBester/pybullet-UR10-navigation.git
+cd pybullet-UR10-navigation
 ``` 
 
 Install dependencies:
