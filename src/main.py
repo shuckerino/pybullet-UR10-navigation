@@ -5,6 +5,7 @@ import numpy as np
 import pybullet as p
 import pybullet_data
 
+import socket
 
 def create_marker_point(x, y, z, size, colour=[0, 255, 0, 255]):
     """
@@ -106,7 +107,31 @@ def euclidean_distance(a, b):
     return np.linalg.norm(a - b)
 
 
+def create_tcp_connection(unity_ip : str, unity_port : int):
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print(f"Trying to connect to {unity_ip}:{unity_port}")
+    client_socket.connect((unity_ip, unity_port))
+    return client_socket
+
+
+def send_joint_positions_to_unity(joint_angles : list[float], client_socket):
+    """
+    Sends the UR10's joint angles to Unity.
+    Expects `joint_angles` as a list of x floats, with x being the number of joints the robot arm has.
+    """
+    # Construct message
+    message_type = 3  # UpdatePose as per RobotControllerMessageType in Unity
+    payload = ','.join(map(str, joint_angles)) + ',0,0,0,0,0,0,0'  # Extra zeros for brick data
+    message = f"{message_type}\t{payload}"
+    
+    # Send message to Unity
+    client_socket.sendall(message.encode('ascii'))
+
 if __name__ == "__main__":
+    
+    unity_ip = "127.0.0.1"
+    unity_port = 40000
+    
     p.connect(p.GUI)
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
     p.setGravity(0, 0, -10)
@@ -149,6 +174,9 @@ if __name__ == "__main__":
     ]
 
     curr_point_idx = 0
+    
+    # Connect to unity
+    client_socket = create_tcp_connection(unity_ip, unity_port)
 
     while curr_point_idx < len(target_point_idx):
         if curr_point_idx == len(target_point_idx) -1:
