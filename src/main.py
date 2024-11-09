@@ -151,6 +151,8 @@ if __name__ == "__main__":
     curr_point_idx = 0
 
     while curr_point_idx < len(target_point_idx):
+        if curr_point_idx == len(target_point_idx) -1:
+            curr_point_idx = 0
         if (
             euclidean_distance(
                 get_arm_position(robot_id), points[target_point_idx[curr_point_idx]]
