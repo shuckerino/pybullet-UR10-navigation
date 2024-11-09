@@ -5,7 +5,10 @@
     <img src="https://github.com/TristanBester/pybullet-UR10-navigation/blob/main/assets/demo_angle_one.gif" alt="Your GIF" width="400" />
 </div>
 
-## Ovierview
+## Credit
+This repository is forked from following [repository](https://github.com/TristanBester/pybullet-UR10-navigation). The code is slightly modified for own project purposes.
+
+## Overview
 This project demonstrates how to control a Universal Robots UR10 robot in the PyBullet physics simulator using Python. PyBullet is a physics engine that allows for simulation and control of robotic systems. The UR10 is a popular industrial robot with six degrees of freedom.
 
 ## Prerequisites
@@ -31,6 +34,11 @@ Install dependencies:
 
 ```bash
 poetry install
+```
+Start poetry virtual environment:
+
+```bash
+poetry shell
 ```
 
 Run the simulation:
