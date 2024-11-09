@@ -6,6 +6,7 @@ import pybullet as p
 import pybullet_data
 
 import socket
+import math
 
 def create_marker_point(x, y, z, size, colour=[0, 255, 0, 255]):
     """
@@ -119,10 +120,15 @@ def send_joint_positions_to_unity(joint_angles : list[float], client_socket):
     Sends the UR10's joint angles to Unity.
     Expects `joint_angles` as a list of x floats, with x being the number of joints the robot arm has.
     """
+    
+    # Convert joint angles from radians to degrees
+    joint_angles_degrees = [math.degrees(angle) for angle in joint_angles]
+    
     # Construct message
     message_type = 3  # UpdatePose as per RobotControllerMessageType in Unity
-    payload = ','.join(map(str, joint_angles)) + ',0,0,0,0,0,0,0'  # Extra zeros for brick data
-    message = f"{message_type}\t{payload}"
+    payload = ""
+    payload = ','.join(map(str, joint_angles_degrees)) + ',0,0,0,0,0,0,0,0'  # Extra zeros for brick data
+    message = f"{message_type}\t{payload}\n"
     
     # Send message to Unity
     client_socket.sendall(message.encode('ascii'))
@@ -130,8 +136,19 @@ def send_joint_positions_to_unity(joint_angles : list[float], client_socket):
 if __name__ == "__main__":
     
     unity_ip = "127.0.0.1"
-    unity_port = 40000
+    unity_port = 11001
+    client_socket = None
     
+    yes_or_no = input(f"Do you want to connect to Unity on {unity_ip}:{unity_port}? [Y]es or [N]o?")
+    connect_to_unity = False
+    if yes_or_no.lower() == "y" or yes_or_no.lower() == "yes":
+        connect_to_unity = True
+    elif yes_or_no.lower() == "n" or yes_or_no.lower() == "no":
+        connect_to_unity = False
+    else:
+        print("Invalid decision! Exiting application...")
+        exit()
+        
     p.connect(p.GUI)
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
     p.setGravity(0, 0, -10)
@@ -141,7 +158,7 @@ if __name__ == "__main__":
         cameraDistance=2,
         cameraTargetPosition=[2, 0, 1],
     )
-    p.startStateLogging(p.STATE_LOGGING_VIDEO_MP4, "robot_movement.mp4")
+    # p.startStateLogging(p.STATE_LOGGING_VIDEO_MP4, "robot_movement.mp4")
 
     robot_id, joints = load_robot()
 
@@ -176,7 +193,8 @@ if __name__ == "__main__":
     curr_point_idx = 0
     
     # Connect to unity
-    client_socket = create_tcp_connection(unity_ip, unity_port)
+    if connect_to_unity:
+        client_socket = create_tcp_connection(unity_ip, unity_port)
 
     while curr_point_idx < len(target_point_idx):
         if curr_point_idx == len(target_point_idx) -1:
@@ -234,6 +252,23 @@ if __name__ == "__main__":
 
         p.configureDebugVisualizer(p.COV_ENABLE_SINGLE_STEP_RENDERING)
         p.stepSimulation()
+        
+        # Retrieve current joint angles
+        if connect_to_unity:
+            joint_angles = [p.getJointState(robot_id, joints[i]["jointID"])[0] for i in range(6)]
+            
+            try:
+                send_joint_positions_to_unity(joint_angles, client_socket)
+                print(f"Successfully sent to unity: {joint_angles}")
+            except:
+                print(f"Error while sending to unity: {joint_angles}")
+                break
+        time.sleep(0.1)
 
-    p.stopStateLogging(p.STATE_LOGGING_VIDEO_MP4)
+    # p.stopStateLogging(p.STATE_LOGGING_VIDEO_MP4)
+    # Close the socket connection after the loop
+    if connect_to_unity:
+        client_socket.close()
+        print("Connection to Unity closed")
     time.sleep(3)
+    exit()
